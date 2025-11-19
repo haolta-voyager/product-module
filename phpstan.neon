@@ -1,0 +1,26 @@
+# templates/phpstan.neon.dist
+
+parameters:
+    level: 5
+    paths:
+        # Common paths
+        - routes
+        - app
+        - config
+        - database
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Call to an undefined static method App\\Models\\.*::.*#'
+
+# REGISTER CUSTOM RULE
+services:
+    -
+        # Class you created in src/
+        class: Voyager\DevTools\Rules\NoBadCodeInControllerRule
+
+        # Tell PHPStan this is a Rule
+        tags:
+            - phpstan.rules.rule
+
+includes:
+    - phpstan-baseline.neon

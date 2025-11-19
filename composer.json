@@ -8,7 +8,9 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "mongodb/laravel-mongodb": "^5.5",
+        "nwidart/laravel-modules": "^12.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -18,13 +20,14 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
         "phpunit/phpunit": "^11.5.3",
-        "voyager/dev-tools": "1.0.0"
+        "voyager/dev-tools": "^1.0"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Modules\\": "Modules/"
         }
     },
     "autoload-dev": {
@@ -66,12 +69,28 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ]
+        ],
+        "migrate:mysql": "php artisan migrate --database=mysql --path=database/migrations/mysql",
+        "migrate:pgsql": "php artisan migrate --database=pgsql --path=database/migrations/postgres",
+        "migrate:mongo": "php artisan migrate --database=mongodb --path=database/migrations/mongo",
+        "migrate:all": [
+            "@composer migrate:mysql",
+            "@composer migrate:pgsql",
+            "@composer migrate:mongo"
+        ],
+        "make:mig:mysql": "php artisan make:migration --path=database/migrations/mysql",
+        "make:mig:pgsql": "php artisan make:migration --path=database/migrations/postgres",
+        "make:mig:mongo": "php artisan make:migration --path=database/migrations/mongo"
     },
     "extra": {
         "laravel": {
             "dont-discover": []
-        }
+        },
+        "merge-plugin": {
+        "include": [
+            "Modules/*/composer.json"
+        ]
+    }
     },
     "config": {
         "optimize-autoloader": true,
@@ -80,7 +99,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true,
-            "voyager/dev-tools": true
+            "voyager/dev-tools": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "minimum-stability": "stable",
