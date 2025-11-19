@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c514d8f7b9fc5970bdd94287905ef584",
+    "content-hash": "13a5d523299711b62fa425a95e4251fe",
     "packages": [
         {
             "name": "brick/math",
@@ -8351,6 +8351,59 @@
                 }
             ],
             "time": "2025-11-17T20:03:58+00:00"
+        },
+        {
+            "name": "voyager/dev-tools",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:Voyager-hcm/dev-tools.git",
+                "reference": "e0a678728188cdd665d387a1d3de44a232453870"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Voyager-hcm/dev-tools/zipball/e0a678728188cdd665d387a1d3de44a232453870",
+                "reference": "e0a678728188cdd665d387a1d3de44a232453870",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^2.0"
+            },
+            "require-dev": {
+                "composer/composer": "^2.0",
+                "larastan/larastan": "^2.0",
+                "phpstan/phpstan": "^1.10"
+            },
+            "bin": [
+                "scripts/voyager-run",
+                "scripts/voyager-baseline",
+                "scripts/voyager-fix",
+                "scripts/voyager-secrets-update"
+            ],
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Voyager\\DevTools\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Voyager\\DevTools\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phu Hoa Doan",
+                    "email": "hoadp@voyager-hcm.com"
+                }
+            ],
+            "description": "VOYAGER INC. standard development tools...",
+            "support": {
+                "source": "https://github.com/Voyager-hcm/dev-tools/tree/v1.0.0",
+                "issues": "https://github.com/Voyager-hcm/dev-tools/issues"
+            },
+            "time": "2025-11-14T07:43:21+00:00"
         }
     ],
     "aliases": [],
