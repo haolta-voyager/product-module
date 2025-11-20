@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register module middlewares at application level
+        $router = $this->app['router'];
+
+        $router->aliasMiddleware('check.user.role', \Modules\Product\Http\Middleware\CheckUserRole::class);
+        $router->aliasMiddleware('check.customer.role', \Modules\Product\Http\Middleware\CheckCustomerRole::class);
     }
 }

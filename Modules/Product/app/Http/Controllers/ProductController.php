@@ -3,54 +3,116 @@
 namespace Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Modules\Product\DTOs\ProductData;
+use Modules\Product\Http\Requests\StoreProductRequest;
+use Modules\Product\Http\Requests\UpdateProductRequest;
+use Modules\Product\Services\ProductService;
+use Modules\Product\Services\CategoryService;
+use Modules\Product\Services\ReviewService;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\View;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(
+        private ProductService $productService,
+        private CategoryService $categoryService,
+        private ReviewService $reviewService
+    ) {}
+
+    public function index(): View
     {
-        return view('product::index');
+        $categoryId = request('category_id');
+        $search = request('search');
+        $categories = $this->categoryService->getAllCategories();
+        
+        if ($search && $categoryId) {
+            // Search with category filter
+            $products = $this->productService->searchProductsWithCategory($search, $categoryId, perPage: 10);
+        } elseif ($search) {
+            // Search only
+            $products = $this->productService->searchProducts($search, perPage: 10);
+        } elseif ($categoryId) {
+            // Category filter only
+            $products = $this->productService->getProductsByCategory($categoryId, perPage: 10);
+        } else {
+            // No filters
+            $products = $this->productService->getProductsPaginated(perPage: 10);
+        }
+
+        return view('product::products.index', compact('products', 'categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
-        return view('product::create');
+        $categories = $this->categoryService->getAllCategories();
+        
+        return view('product::products.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        return view('product::show');
+        $productData = ProductData::fromArray($request->validated());
+        $this->productService->createProduct($productData);
+        
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function show(int $id): View
     {
-        return view('product::edit');
+        $product = $this->productService->getProductById($id);
+        
+        if (!$product) {
+            abort(404);
+        }
+        
+        // Load reviews from MongoDB
+        $reviews = \Modules\Product\Models\Review::where('product_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Get average rating and review count
+        $averageRating = $this->reviewService->getProductAverageRating($id);
+        $reviewCount = $this->reviewService->getProductReviewCount($id);
+        
+        return view('product::products.show', compact('product', 'reviews', 'averageRating', 'reviewCount'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function edit(int $id): View
+    {
+        $product = $this->productService->getProductById($id);
+        $categories = $this->categoryService->getAllCategories();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        if (!$product) {
+            abort(404);
+        }
+
+        return view('product::products.edit', compact('product', 'categories'));
+    }
+
+    public function update(UpdateProductRequest $request, int $id): RedirectResponse
+    {
+        $productData = ProductData::fromArray($request->validated());
+        $updated = $this->productService->updateProduct($id, $productData);
+
+        if (!$updated) {
+            return back()->with('error', 'Product not found');
+        }
+        
+        return redirect()->route('products.index')
+            ->with('success', 'Product updated successfully');
+    }
+
+    public function destroy(int $id): RedirectResponse
+    {
+        $deleted = $this->productService->deleteProduct($id);
+        
+        if (!$deleted) {
+            return back()->with('error', 'Product not found');
+        }
+        
+        return redirect()->route('products.index')
+            ->with('success', 'Product deleted successfully');
+    }
 }

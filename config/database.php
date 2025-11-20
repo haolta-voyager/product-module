@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -111,7 +111,6 @@ return [
                 'database' => env('MONGO_AUTH_DATABASE', 'admin'),
             ],
         ],
-
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

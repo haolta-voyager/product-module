@@ -23,4 +23,4 @@ services:
             - phpstan.rules.rule
 
 includes:
-    - phpstan-baseline.neon
+    - /tools/vendor/larastan/larastan/extension.neon

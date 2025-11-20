@@ -16,29 +16,22 @@ MYSQL_CONNECTION=mysql
 MYSQL_HOST=mysql
 MYSQL_PORT=3306
 MYSQL_DATABASE=product-module
-MYSQL_USERNAME=default
-MYSQL_PASSWORD=secret
 
 PG_CONNECTION=pgsql
 PG_HOST=postgres
 PG_PORT=5432
 PG_DATABASE=product-module
-PG_USERNAME=default
-PG_PASSWORD=secret
 
 MONGO_CONNECTION=mongodb
 MONGO_HOST=mongo
 MONGO_PORT=27017
 MONGO_DATABASE=product-module
-MONGO_USERNAME=
-MONGO_PASSWORD=
 ```
 
 ### 2. Cài đặt dependencies
 
 ```bash
 composer install
-npm install
 ```
 
 ### 3. Chạy migration
@@ -89,24 +82,6 @@ npm run dev
 - **Categories**: `/product/categories`
 - **Products**: `/product/products`  
 - **Reviews**: `/product/products/{product}/reviews`
-
-## 📁 Cấu trúc Module
-
-```
-Modules/Product/
-├── app/
-│   ├── DTOs/                    # Data Transfer Objects
-│   ├── Models/                  # Eloquent Models
-│   ├── Services/               # Business Logic Layer
-│   ├── Repositories/           # Data Access Layer
-│   ├── Http/
-│   │   ├── Controllers/        # 
-│   │   └── Requests/           # Form Validation
-│   └── Providers/              # Service Providers
-├── resources/views/            # Blade Templates
-├── routes/web.php             # Routes
-└── database/migrations/       # Database Migrations
-```
 
 ## 🔧 Troubleshooting
 

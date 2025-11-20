@@ -36,6 +36,12 @@ class UserServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        
+        // Bind interface to implementation for other modules to use
+        $this->app->singleton(
+            \App\Contracts\UserAuthorizationInterface::class,
+            \Modules\User\Services\UserAuthorizationService::class
+        );
     }
 
     /**
