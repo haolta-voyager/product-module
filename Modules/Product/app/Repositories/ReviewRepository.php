@@ -15,7 +15,7 @@ class ReviewRepository
     {
         return $this->model
             ->where('product_id', $productId)
-            ->orderBy('id', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
     }
 

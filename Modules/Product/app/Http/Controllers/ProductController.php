@@ -68,9 +68,7 @@ class ProductController extends Controller
         }
         
         // Load reviews from MongoDB
-        $reviews = \Modules\Product\Models\Review::where('product_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $reviews = $this->reviewService->getReviewsByProduct($id);
         
         // Get average rating and review count
         $averageRating = $this->reviewService->getProductAverageRating($id);
